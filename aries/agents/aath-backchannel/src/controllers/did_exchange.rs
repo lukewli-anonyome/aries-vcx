@@ -176,6 +176,8 @@ impl HarnessAgent {
             }
         };
 
+        let request_did = request.inner().content.did.clone();
+
         let request_thread = &request.inner().decorators.thread;
 
         let opt_invitation = match request_thread.as_ref().and_then(|th| th.pthid.as_ref()) {
@@ -188,7 +190,7 @@ impl HarnessAgent {
         let (thid, pthid, my_did, their_did) = self
             .aries_agent
             .did_exchange()
-            .handle_msg_request(request, opt_invitation)
+            .handle_msg_request(request, &request_did, opt_invitation)
             .await?;
 
         if let Some(pthid) = pthid {
